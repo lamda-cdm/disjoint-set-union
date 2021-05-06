@@ -1,0 +1,58 @@
+class dsu
+{
+    ll *parent;
+    ll *size;
+public:
+    ll distinct;
+    dsu(){}
+    dsu(int n):distinct(n)
+    {
+        parent=new ll [n+1];
+        size=new ll [n+1];
+        for(int i=1;i<=n;i++)
+        {
+            parent[i]=i;
+            size[i]=1;
+        }
+    }
+    ll find_parent(int i)
+    {
+        if(parent[parent[i]]!=parent[i])
+            parent[i]=find_parent(parent[i]);
+        return parent[i];
+    }
+    bool find(int a,int b)
+    {
+        if(find_parent(a)==find_parent(b))
+        {
+            return true;
+        }
+        return false;
+    }
+    void uni(int a,int b)
+    {
+        ll parent_a=find_parent(a),parent_b=find_parent(b);
+        if(parent_a==parent_b)
+            return;
+        if(size[parent_a]>=size[parent_b])
+        {
+            distinct--;
+            size[parent_a]+=size[parent_b];
+            parent[parent_b]=parent_a;
+        }
+        else
+        {
+            distinct--;
+            size[parent_b]+=size[parent_a];
+            parent[parent_a]=parent_b;
+        }
+    }
+    ll siz(int a)
+    {
+        return size[find_parent(a)];
+    }
+    ~dsu()
+    {
+        delete []size;delete []parent;
+    }
+};
